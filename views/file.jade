@@ -1,0 +1,32 @@
+//
+   Created by Yc on 2016/5/27.
+extends layout
+
+block content
+    -dirname=dirname.replace(/\/*$/,'');
+    h1=dirname===''?'/':dirname
+    include btns
+    table.table.table-striped
+        thead
+            tr
+                td 类型
+                td 文件名
+                td 操作
+                td 修改时间
+                td 大小
+        tbody
+            each obj in files
+             tr
+                td= obj.type
+                td
+                    a(href=dirname+'/'+obj.name+'?noraw=true')= obj.name
+                td
+                 -if(obj.type!=='文件')
+                    a(href=dirname+'/'+obj.name+'/?compress=true',download=obj.name+'.zip') 打包下载
+                 -if(obj.type==='文件')
+                    a(href=dirname+'/'+obj.name,download=obj.name) 下载
+                td= obj.time
+                td= obj.size
+
+    footer
+        p.text-center.text-info Running on node with Express, Jade. By Moyu.
