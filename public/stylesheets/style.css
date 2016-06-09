@@ -13,9 +13,16 @@ a {
 .text-info{
   color: #00B7FF;
 }
+.text-right{
+  text-align: right;
+}
 footer{
   margin-top:80px;
 }
 .text-primary{
   color: crimson;
+}
+iframe[id=html-show] {
+  border:1px solid #bbbbbb;
+  padding:10px;width:100%;height:400px;
 }

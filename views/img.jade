@@ -3,8 +3,10 @@
 extends layout
 
 block content
-    h1=title
-    include btns
-    img(src=src)
-    footer
-        p.text-center.text-info Running on node with Express, Jade. By Moyu.
+    div.container-fluid
+        h1=title
+        include btns
+        div
+            img.img-responsive(src=src)
+        footer
+            p.text-center.text-info Running on node with Express, Jade. By Moyu.

@@ -153,31 +153,26 @@ function loadFile(file,rela,noraw,res){
             }else if(f.match(/\.(mp3|wma|aac)$/i)){
                 res.render('audio',o);
             }else if(f.match(/\.(md|markdown)$/i)){
-                var renderer = new marked.Renderer();
-                var map = {};
-                renderer.heading = function (text, level) {
-                    var escapedText = text.toLowerCase();
-                    if(!!map[text])
-                        escapedText+='-'+map[text]++;
-                    else
-                        map[text]=1;
-                    return '<h' + level + '><a name="' +
-                        escapedText +
-                        '" class="anchor" href="#' +
-                        escapedText +
-                        '"><span class="header-link"></span></a>' +
-                        text + '</h' + level + '>';
-                };
-                marked.setOptions({
-                    highlight: function (code) {
-                        return hl.highlightAuto(code).value;
-                    }
+                fs.readFile(file,(error,data) => {
+                    if(error) throw error;
+                    o.content = data.toString();
+                    res.render('md',o);
                 });
-                o.content = marked(fs.readFileSync(file).toString(),{renderer:renderer});
-                res.render('md',o);
-            }else if(f.match(/\.(java|c|cpp|js|css|jsp|php|json)$/i)){
-                o.content=hl.highlightAuto(fs.readFileSync(file).toString()).value;
-                res.render('code',o);
+            }else if(f.match(/\.(java|c|cpp|js|css|jsp|php|json|txt)$/i)){
+                fs.readFile(file,(error,data) => {
+                    if(error) throw error;
+                    // console.time('hl');
+                    // o.content=hl.highlightAuto(data.toString()).value;
+                    // console.timeEnd('hl');
+                    o.content = data.toString();
+                    res.render('code',o);
+                });
+            }else if(f.match(/\.(html|htm)$/i)){
+                fs.readFile(file,(error,data) => {
+                    if(error) throw error;
+                    o.content = data.toString();
+                    res.render('html',o);
+                });
             }else{
                 res.sendFile(rela,{root:global.root});
             }
@@ -185,7 +180,6 @@ function loadFile(file,rela,noraw,res){
     }else{
         res.sendFile(rela,{root:global.root});
     }
-
 }
 
 exports.index = function(req, res){

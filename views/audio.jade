@@ -3,12 +3,13 @@
 extends layout
 
 block content
-    h1=title
-    p.text-primary 若不能播放，则不支持该格式在线播放，请
-        a(href=src,style="margin:0px") 下载
-        欣赏。
-    include btns
-    audio(src=src controls="controls" autoplay="autoplay") 您的浏览器不支持 audio 标签。
+    div.container-fluid
+        h1=title
+        p.text-primary 若不能播放，则不支持该格式在线播放，请
+            a(href=src,style="margin:0px") 下载
+            欣赏。
+        include btns
+        audio(src=src controls="controls" autoplay="autoplay") 您的浏览器不支持 audio 标签。
 
-    footer
-        p.text-center.text-info Running on node with Express, Jade. By Moyu.
+        footer
+            p.text-center.text-info Running on node with Express, Jade. By Moyu.

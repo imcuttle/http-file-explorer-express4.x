@@ -27,7 +27,7 @@ var fs = require('fs');
 global.root = fs.readFileSync('./root.txt').toString().split(/\s+/)[0];
 fs.watchFile('./root.txt',function () {
   global.root = fs.readFileSync('./root.txt').toString().split(/\s+/)[0];
-})
+});
 app.use('/users', users);
 app.use('/*', routes.index);
 

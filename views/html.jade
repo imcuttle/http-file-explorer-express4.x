@@ -3,7 +3,6 @@
 extends layout
 
 block content
-    script(src="http://cdn.bootcss.com/marked/0.3.5/marked.min.js")
     script(src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js")
     div.container-fluid
         h1=title
@@ -13,12 +12,12 @@ block content
                 h2 解析前
                 div.markdown-body
                     pre
-                        code(id='markdown-raw')=content
+                        code(id='html-raw')=content
             div.col-lg-6
-                h2 解析后
-                div.markdown-body(id='markdown-show')
-        script(src="/javascripts/md.js")
-        script document.getElementById('markdown-show').innerHTML = marked(document.getElementById('markdown-raw').innerText,{renderer:renderer});
-
+                h2.clearfix 解析后
+                    small
+                        a.pull-right(href=src,target='_blank')点击预览
+                iframe(id='html-show',src=src)
+        script(src='/javascripts/html.js')
         footer
             p.text-center.text-info Running on node with Express, Jade. By Moyu.

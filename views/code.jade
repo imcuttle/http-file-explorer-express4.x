@@ -3,9 +3,13 @@
 extends layout
 
 block content
-    h1=title
-    include btns
-    div.markdown-body
-        pre!=content
-    footer
-        p.text-center.text-info Running on node with Express, Jade. By Moyu.
+    script(src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js")
+    div.container-fluid
+        h1=title
+        include btns
+        div.markdown-body
+            pre
+                code!=content
+        script hljs.initHighlightingOnLoad();
+        footer
+            p.text-center.text-info Running on node with Express, Jade. By Moyu.
