@@ -5,7 +5,8 @@
 var fs = require('fs');
 var url = require('url');
 var archiver = require('archiver');
-
+var marked = require('marked');
+var hl = require('highlight.js');
 
 function loadZip(file,rela,req,res) {
     var state = fs.statSync(file);
@@ -74,7 +75,6 @@ function loadDir(r,rela,req,res) {
                 o.next = list[i + 1];
             }
         }
-        console.log('o',o);
         Promise.all(files.map((x,i,a)=>{return statP(r,x);}))
             .then(function (results) {
 				var values=[];
@@ -152,7 +152,33 @@ function loadFile(file,rela,noraw,res){
                 res.render('img',o);
             }else if(f.match(/\.(mp3|wma|aac)$/i)){
                 res.render('audio',o);
-            }else {
+            }else if(f.match(/\.(md|markdown)$/i)){
+                var renderer = new marked.Renderer();
+                var map = {};
+                renderer.heading = function (text, level) {
+                    var escapedText = text.toLowerCase();
+                    if(!!map[text])
+                        escapedText+='-'+map[text]++;
+                    else
+                        map[text]=1;
+                    return '<h' + level + '><a name="' +
+                        escapedText +
+                        '" class="anchor" href="#' +
+                        escapedText +
+                        '"><span class="header-link"></span></a>' +
+                        text + '</h' + level + '>';
+                };
+                marked.setOptions({
+                    highlight: function (code) {
+                        return hl.highlightAuto(code).value;
+                    }
+                });
+                o.content = marked(fs.readFileSync(file).toString(),{renderer:renderer});
+                res.render('md',o);
+            }else if(f.match(/\.(java|c|cpp|js|css|jsp|php|json)$/i)){
+                o.content=hl.highlightAuto(fs.readFileSync(file).toString()).value;
+                res.render('code',o);
+            }else{
                 res.sendFile(rela,{root:global.root});
             }
         }

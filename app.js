@@ -22,8 +22,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(express.static(path.join('/')));
+var fs = require('fs');
 
-global.root = require('fs').readFileSync('root.txt').toString().split(/\s+/)[0];
+global.root = fs.readFileSync('./root.txt').toString().split(/\s+/)[0];
+fs.watchFile('./root.txt',function () {
+  global.root = fs.readFileSync('./root.txt').toString().split(/\s+/)[0];
+})
 app.use('/users', users);
 app.use('/*', routes.index);
 
